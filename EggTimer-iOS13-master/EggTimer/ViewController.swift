@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import AVFoundation
+
 
 class ViewController: UIViewController {
     
@@ -20,6 +22,8 @@ class ViewController: UIViewController {
     var seconCount = 0
 
     var timer = Timer()
+    
+    var bombSoundEffect: AVAudioPlayer?
     
     
     @IBOutlet weak var progressBar: UIProgressView!
@@ -44,6 +48,7 @@ class ViewController: UIViewController {
         } else {
             timer.invalidate()
             titleLabel.text = "Done!"
+            Sound(element:"alarm_sound" )
         }
     }
     
@@ -66,5 +71,15 @@ class ViewController: UIViewController {
         
     }
 
+    func Sound(element: String) {
+        let path = Bundle.main.path(forResource: element, ofType:"mp3")!
+        let url = URL(fileURLWithPath: path)
 
+        do {
+            bombSoundEffect = try AVAudioPlayer(contentsOf: url)
+            bombSoundEffect?.play()
+        } catch {
+            // couldn't load file :(
+        }
+    }
 }
