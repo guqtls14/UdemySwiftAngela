@@ -1,15 +1,14 @@
 //
-//  ViewController.swift
+//  QuizBrain.swift
 //  Quizzler-iOS13
 //
-//  Created by Angela Yu on 12/07/2019.
-//  Copyright © 2019 The App Brewery. All rights reserved.
+//  Created by 김신협 on 2022/12/19.
+//  Copyright © 2022 The App Brewery. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
-class ViewController: UIViewController {
-    
+struct QuizBrain {
     let quiz = [
         Question(q: "A slug's blood is green.", a: "True"),
         Question(q: "Approximately one quarter of human bones are in the feet.", a: "True"),
@@ -28,54 +27,42 @@ class ViewController: UIViewController {
     
     var quetionNumber = 0
     
+    var score = 0
     
-    @IBOutlet weak var questionLabel: UILabel!
-    @IBOutlet weak var progessBar: UIProgressView!
-    @IBOutlet weak var trueBtn: UIButton!
-    @IBOutlet weak var falseBtn: UIButton!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        updateUI()
-        
-        progessBar.progress = 0.0
-    }
-
-
-    
-    @IBAction func answerTapped(_ sender: UIButton) {
-        let userAnswer = sender.currentTitle!
-        let actualAnswer = quiz[quetionNumber].answer
-        let actualQuestion = quiz[quetionNumber]
-    
-//     버튼색깔 바꿈
-        if userAnswer == actualAnswer {
-            sender.backgroundColor = UIColor.green
+    mutating func checkAnswer(_ userAnswer: String) -> Bool {
+        if userAnswer == quiz[quetionNumber].answer {
+            //            User got it right
+            score += 1
+            return true
         } else {
-            sender.backgroundColor = UIColor.red
+            //            use got it wrong
+            return false
         }
-//      다음 배열의 원소로
+    }
+    
+    func getQuestionText() -> String {
+        return quiz[quetionNumber].text
+    }
+    
+    func getProgress() -> Float {
+        return Float(quetionNumber+1) / Float(quiz.count)
+    }
+    
+    mutating func nextQuestion() { // 구조체에서는 struct안에있는 self가 let으로 설정됨, 이걸 var로 바꾸려면 메서드앞에 mutating을 붙여야함!
+        //      다음 배열의 원소로
         if quetionNumber < quiz.count-1 {
-
+            
             quetionNumber = quetionNumber + 1
         } else {
             quetionNumber = 0
+            score = 0
         }
         
-        //  시간차로 버튼 색깔 바뀜
-        Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(updateUI), userInfo: nil, repeats: false)
         
-        
-//        updateUI()
     }
     
-    @objc func updateUI() {
-        questionLabel.text = quiz[quetionNumber].text
-        trueBtn.backgroundColor = UIColor.clear
-        falseBtn.backgroundColor = UIColor.clear
-        
-        progessBar.progress = Float(quetionNumber+1) / Float(quiz.count)
+    func getScore() -> Int {
+        return score
     }
+    
 }
-
