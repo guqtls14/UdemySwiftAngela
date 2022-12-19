@@ -16,7 +16,6 @@ class SecondViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = UIColor.brown
-        
         let label = UILabel()
         label.text = bimValue
         label.frame = CGRect(x: 0, y: 0, width: 100, height: 50)
