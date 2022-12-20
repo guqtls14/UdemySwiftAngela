@@ -10,7 +10,8 @@ import UIKit
 
 class CalculateViewController: UIViewController {
     
-    var bmiValue = "0.0"
+    var calculatorBrain = CalculatorBrain()
+//    var bmiValue = "0.0"
     
     @IBOutlet weak var mainLabel: UILabel!
     
@@ -42,16 +43,23 @@ class CalculateViewController: UIViewController {
     @IBAction func buttonTapped(_ sender: UIButton) {
         let height = heightSlider.value
         let weight = weightSlider.value
-        var BMI = weight / pow(height, 2)
-        bmiValue = String(format: "%.1f", BMI)
         
+        calculatorBrain.calculateBMI(height: height, weight: weight)
+//        var BMI = weight / pow(height, 2)
+//        bmiValue = String(format: "%.1f", BMI)
+        
+//        segue 객체의 코드를 실행하기위한 메서드
         self.performSegue(withIdentifier: "goToResult", sender: self)
     }
     
+//    화면을 전환하기전 데이터를 전달하기위해 실행하는 메서드(가장먼저실행)
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToResult" {
             let destinationVC = segue.destination as! ResultViewController // 디운캐스팅
-            destinationVC.bmiValue = bmiValue
+            destinationVC.bmiValue = calculatorBrain.getBmiValue()
+            
+            destinationVC.advice = calculatorBrain.getAdvice()
+            destinationVC.color = calculatorBrain.getColor()
         }
     }
 }
